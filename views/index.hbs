@@ -1,41 +1,25 @@
 <html>
     <head>
+        <script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
         <style type="text/css">
             h1 {
                 text-align: center;
             }
-
-            h2 {
-                text-align: center;
-            }
-
-            .add {
-              text-align: center;
-            }
-
-            . {
-                font-family: Georgia;
-            }
-
-            li {
-              padding: 30px 30px;
-              text-align: center;
-            }
-
-            ul {
-              overflow: hidden;
-              margin: 0;
-              width: 100%;
-              padding: 0;
-              list-style-type: none;
-            }
+            a-scene { display: block; width: 50%; }
         </style>
     </head>
 
     <body>
-        <h1>Output from 4 servers:</h1>
-        <p>{{ out }}</p>
-        
+        <h1>output from 4 servers</h1>
+        <p>{{out}}</p>
+        <a-scene embedded>
+            <a-box position="-1 0.5 -3" rotation="0 45 0" color="#4CC3D9"></a-box>
+            <a-sphere position="0 1.25 -5" radius="1.25" color="#EF2D5E"></a-sphere>
+            <a-cylinder position="1 0.75 -3" radius="0.5" height="1.5" color="#FFC65D"></a-cylinder>
+            <a-plane position="0 0 -4" rotation="-90 0 0" width="4" height="4" color="#7BC8A4"></a-plane>        
+            <a-sky color="#ECECEC"></a-sky>
+        </a-scene>
+        <script>setTimeout(function(){ window.location.href = window.location.href; }, 1000);</script> 
     </body>
 
 </html>
