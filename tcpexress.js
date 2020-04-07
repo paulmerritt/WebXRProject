@@ -4,7 +4,8 @@ const app = express();
 var compression = require('compression')
 var net = require('net');
 var reload = require('reload');
-
+var fs = require('fs');
+var https = require('https');
 
 var client = new net.Socket();
 var client1 = new net.Socket();
@@ -137,5 +138,12 @@ app.get('/',function( req, res ) {
 
 
 
-app.listen(8080);
+https.createServer({
+    key: fs.readFileSync('server.key'),
+    cert: fs.readFileSync('server.cert')
+  }, app)
+  .listen(8080, function () {
+    //console.log('Example app listening on port 3000! Go to https://localhost:3000/')
+  })
+  
 console.log('Started server on port 8080');
