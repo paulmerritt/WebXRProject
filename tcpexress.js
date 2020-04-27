@@ -137,13 +137,17 @@ app.get('/',function( req, res ) {
 });
 
 
+var privateKey  = fs.readFileSync('server.key', 'utf8');
+var certificate = fs.readFileSync('server.cert', 'utf8');
 
-https.createServer({
-    key: fs.readFileSync('server.key'),
-    cert: fs.readFileSync('server.cert')
-  }, app)
-  .listen(8080, function () {
-    //console.log('Example app listening on port 3000! Go to https://localhost:3000/')
-  })
+var credentials = {key: privateKey, cert: certificate};
+
+// your express configuration here
+
+
+var httpsServer = https.createServer(credentials, app);
+
+
+httpsServer.listen(8080);
   
-console.log('Started server on port 8080');
+
