@@ -28,7 +28,7 @@ var port = 57000;
 var server = net.createServer();
 server.listen(port);
 server.on('connection', function(socket){
-	//socket = new JsonSocket(socket);
+  //socket = new JsonSocket(socket);
 	vital.forEach((v, i)=>{
 		setTimeout(function(){
 			try{

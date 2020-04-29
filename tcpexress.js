@@ -21,6 +21,26 @@ var output = "";
 
 var array = [];
 
+var coords = {
+    lat:0.0, 
+    long:0.0, 
+};
+
+var coords1 = {
+    lat:0.0, 
+    long:0.0, 
+};
+
+var coords2 = {
+    lat:0.0, 
+    long:0.0, 
+};
+
+var coords3 = {
+    lat:0.0, 
+    long:0.0, 
+};
+
 function containsObject(obj, list) {
     var i;
     for (i = 0; i < list.length; i++) {
@@ -43,7 +63,12 @@ client.connect(57000, 'localhost', function() {
 
 client.on('data', function(data) {
     console.log(data.toString());
-    array.push(data.toString());
+    //array.push(data.toString());
+    var j = JSON.parse(data.toString());
+
+    coords.lat = j.coords.latitude;
+    coords.long = j.coords.longitude;
+    
     recentOut = data.toString();
         
 });
@@ -64,6 +89,12 @@ client1.connect(57001, 'localhost', function() {
 client1.on('data', function(data) {
     console.log(data.toString());
     //array.push(data.toString());
+
+    var j = JSON.parse(data.toString());
+
+    coords1.lat = j.coords.latitude;
+    coords1.long = j.coords.longitude;
+
     recentOut1 = data.toString();
         
 });
@@ -85,6 +116,12 @@ client2.connect(57002, 'localhost', function() {
 client2.on('data', function(data) {
     console.log(data.toString());
     //array.push(data.toString());
+
+    var j = JSON.parse(data.toString());
+
+    coords2.lat = j.coords.latitude;
+    coords2.long = j.coords.longitude;
+
     recentOut2 = data.toString();
         
 });
@@ -106,6 +143,12 @@ client3.connect(57003, 'localhost', function() {
 client3.on('data', function(data) {
     console.log(data.toString());
     //array.push(data.toString());
+
+    var j = JSON.parse(data.toString());
+
+    coords3.lat = j.coords.latitude;
+    coords3.long = j.coords.longitude;
+
     recentOut3 = data.toString();
         
 });
@@ -126,9 +169,11 @@ app.get('/',function( req, res ) {
     
     //function updateFoo(){
     
-        var outp = recentOut + "\n" + recentOut1 + "\n" + recentOut2 + "\n" + recentOut3;
+        var outp = "[" + recentOut + ",\n" + recentOut1 + ",\n" + recentOut2 + ",\n" + recentOut3 + "]";
 
-        res.render('index', {layout: false, out: outp});
+        var gpsp = "latitude: " + coords.lat + "; longitude: " + coords.long + ";";
+
+        res.render('index', {layout: false, out: outp, gps: gpsp});
         //res.write('<p>' + outp + '</p>');
         //res.send('<a-scene><a-box position="-1 0.5 -3" rotation="0 45 0" color="#4CC3D9"></a-box><a-sphere position="0 1.25 -5" radius="1.25" color="#EF2D5E"></a-sphere><a-cylinder position="1 0.75 -3" radius="0.5" height="1.5" color="#FFC65D"></a-cylinder><a-plane position="0 0 -4" rotation="-90 0 0" width="4" height="4" color="#7BC8A4"></a-plane>        <a-sky color="#ECECEC"></a-sky></a-scene><h1>Output from 4 servers:</h1><p id="demo">'+outp+'</p>');           
         //setTimeout( updateFoo, 3000); 
