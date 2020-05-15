@@ -1,0 +1,23 @@
+{
+    "sources":[
+        {
+            "server_ip": "localhost",
+            "port": 57000
+        },
+        
+        {
+            "server_ip": "localhost",
+            "port": 57001
+        },
+        
+        {
+            "server_ip": "localhost",
+            "port": 57002
+        },
+        
+        {
+            "server_ip": "localhost",
+            "port": 57003
+        }
+    ]
+}
