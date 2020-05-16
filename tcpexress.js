@@ -27,7 +27,7 @@ app.set('view engine', 'handlebars');
 
 var data = null;
 
-const fileContents = fs.readFileSync('./source.json', 'utf8')
+const fileContents = fs.readFileSync('./config.json', 'utf8')
 
 try {
   data = JSON.parse(fileContents)
@@ -67,6 +67,7 @@ data.sources.forEach(src=>{
     sources.push(source);
 
 });
+
     
 app.get('/sources', (req, res) => {
     
