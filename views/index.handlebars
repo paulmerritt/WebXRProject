@@ -9,21 +9,26 @@
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <title>WebXR demo</title>
+    {{!-- importing latest a-frame --}}
     <script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
+    {{!-- importing a-frame module for forcing an object to look at another --}}
     <script src="https://unpkg.com/aframe-look-at-component@0.8.0/dist/aframe-look-at-component.min.js"></script>
+    {{!-- importing ar.js' a-frame build --}}
     <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar-nft.js"></script>
-    <script src="https://code.jquery.com/jquery-latest.js"></script>
     <script type="text/javascript">
     
+    //run my_function every second
     setInterval("my_function();",1000); 
     function my_function(){
+        //AJAX request for most recent variable data
         var xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function() {
             if (this.readyState == 4 && this.status == 200) {
                 var myArr = JSON.parse(this.responseText);
                 myArr.forEach(source => {
-                  //var t = document.getElementById(''+source.port);
-                  //t.setAttribute('value', ''+source.out);
+                  //update the text for each source with the most recent text
+                  var t = document.getElementById(''+source.port);
+                  t.setAttribute('value', ''+source.out);
               });
             }
         };
@@ -32,12 +37,9 @@
     }
     </script>
   </head>
-
-
-  <body style="margin: 0; overflow: hidden;">
-    <h1 id="demo"></h1>
-  </body>
   <body style='margin : 0px; overflow: hidden;'>
+    {{!-- a-frame scene for the objects we place --}}
+    {{!-- not VR, embedded allows us to fit other content on the webpage, register the webcam as a camera source, debug disabled --}}
     <a-scene
       vr-mode-ui="enabled: false"
       embedded
@@ -49,15 +51,17 @@
               scale=".5 .5 .5"
               color="green"
               >
+              {{!-- id is given based on the port to allow us to iterate and replace text value --}}
                 <a-text id ={{this.port}}
                     value="replace me pls"
-                    look-at="[gps-camera]"
+                    look-at="[camera]"
                     scale="1 1 1"
                 >
                 </a-text>
               </a-box>
             </a-marker>
         {{/each}}
+        {{!-- camera object --}}
       <a-entity camera> </a-entity>
     </a-scene>
   </body>

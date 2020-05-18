@@ -55,8 +55,9 @@ data.sources.forEach(src=>{
         source.coords.latitude = j.coords.latitude;
         source.coords.longitude = j.coords.longitude;
         source.marker = j.marker;
+
+        source.out = JSON.stringify(j).split(',').join('\n'); //TODO: further formatting 
         
-        source.out = JSON.stringify(j);
         //console.log(source.out);
     });
     
@@ -68,6 +69,7 @@ data.sources.forEach(src=>{
 
 });
 
+
     
 app.get('/sources', (req, res) => {
     
@@ -76,18 +78,7 @@ app.get('/sources', (req, res) => {
 
 app.get('/',function( req, res ) {
     
-        const q = {};
-        var outp = "[";//"[" + recentOut + ",\n" + recentOut1 + ",\n" + recentOut2 + ",\n" + recentOut3 + "]";
-
-        sources.forEach(source=>{
-            outp += source.out + ",\n";
-        });
-
-        outp += "]";
-
-        //var gpsp = "latitude: " + coords.lat + "; longitude: " + coords.long + ";";
-
-        res.render('index', {layout: false, sources_array: sources});
+    res.render('index', {layout: false, sources_array: sources});
 
 });
 
