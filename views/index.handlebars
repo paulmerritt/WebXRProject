@@ -12,9 +12,9 @@
     {{!-- importing latest a-frame --}}
     <script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
     {{!-- importing a-frame module for forcing an object to look at another --}}
-    <script src="https://unpkg.com/aframe-look-at-component@0.8.0/dist/aframe-look-at-component.min.js"></script>
+    {{!-- <script src="https://unpkg.com/aframe-look-at-component@0.8.0/dist/aframe-look-at-component.min.js"></script> --}}
     {{!-- importing ar.js' a-frame build --}}
-    <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar-nft.js"></script>
+    <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
     <script type="text/javascript">
     
     //run my_function every second
@@ -48,14 +48,17 @@
         {{#each sources_array}}
             <a-marker type='pattern' url={{this.marker}}>
               <a-box
-              scale=".5 .5 .5"
-              color="green"
+              scale="10 10 1"
+              color={{this.color}}
+              opacity=".8"
+              smooth="true"
               >
               {{!-- id is given based on the port to allow us to iterate and replace text value --}}
                 <a-text id ={{this.port}}
                     value="replace me pls"
-                    look-at="[camera]"
-                    scale="1 1 1"
+                    {{!-- look-at="[camera]" --}}
+                    scale=".1 .1 .1"
+                    align="center"
                 >
                 </a-text>
               </a-box>

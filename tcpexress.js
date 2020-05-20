@@ -19,7 +19,8 @@ var source_obj = {
         {
             latitude: 0.0, longitude: 0.0
         },
-    marker: ""
+    marker: "",
+    color: ""
 }
 
 app.engine('handlebars', exphbs());
@@ -43,7 +44,8 @@ data.sources.forEach(src=>{
     source.ip_address = src.server_ip;
     source.port = src.port;
     source.client = new net.Socket();
-
+    source.color = "#000000".replace(/0/g,function(){return (~~(Math.random()*16)).toString(16);});
+        
 
     source.client.connect(source.port, source.ip_address, function() {
         //console.log('Connected');
@@ -57,7 +59,6 @@ data.sources.forEach(src=>{
         source.marker = j.marker;
 
         source.out = JSON.stringify(j).split(',').join('\n'); //TODO: further formatting 
-        
         //console.log(source.out);
     });
     
