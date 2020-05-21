@@ -59,6 +59,7 @@ data.sources.forEach(src=>{
         source.marker = j.marker;
 
         source.out = JSON.stringify(j).split(',').join('\n'); //TODO: further formatting 
+        source.out = source.out.slice(1,-1);
         //console.log(source.out);
     });
     
