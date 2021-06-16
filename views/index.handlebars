@@ -15,6 +15,11 @@
     <script src="https://unpkg.com/aframe-look-at-component@0.8.0/dist/aframe-look-at-component.min.js"></script>
     {{!-- importing ar.js' a-frame build --}}
     <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar-nft.js"></script>
+    {{!-- gradient for a-frame --}}
+    <script src="https://cdn.rawgit.com/zcanter/aframe-gradient-sky/master/dist/gradientsky.min.js"></script>
+
+    <script src="https://rawgit.com/rdub80/aframe-gui/master/dist/aframe-gui.min.js"></script>
+
     <script type="text/javascript">
     
     //run my_function every second
@@ -35,7 +40,10 @@
         xhttp.open("GET", "/sources", true);
         xhttp.send();
     }
+    AFRAME.registerComponent('play-on-click',{init:function(){this.onClick=this.onClick.bind(this);},play:function(){window.addEventListener('click',this.onClick);},pause:function(){window.removeEventListener('click',this.onClick);},onClick:function(evt){var videoEl=this.el.getAttribute('material').src;if(!videoEl){return;}
+this.el.object3D.visible=true;videoEl.play();}});
     </script>
+
   </head>
   <body style='margin : 0px; overflow: hidden;'>
     {{!-- a-frame scene for the objects we place --}}
@@ -45,29 +53,53 @@
       embedded
       arjs="sourceType: webcam; debugUIEnabled: false; detectionMode: mono_and_matrix; matrixCodeType: 3x3;"
     >
+    
+
+<a-camera camera="" position="" rotation="" look-controls="" wasd-controls="">
+<a-entity position="0 0 -1.5" text="align:center;
+                width:6;
+                wrapCount:100;
+                color: white;
+                value: Click or tap to start video" hide-on-play="#video">
+</a-entity>
+</a-camera>
+<canvas class="a-canvas a-grab-cursor" data-aframe-canvas="true" width="1920" height="310"></canvas><div class="a-loader-title" style="display: none;">360 Video</div><div class="a-enter-vr" aframe-injected=""><button class="a-enter-vr-button" title="Enter VR mode with a headset or fullscreen mode on a desktop. Visit https://webvr.rocks or https://webvr.info for more information." aframe-injected=""></button></div><div class="a-enter-ar a-hidden" aframe-injected=""><button class="a-enter-ar-button" title="Enter AR mode with a headset or handheld device. Visit https://webvr.rocks or https://webvr.info for more information." aframe-injected=""></button></div><div class="a-orientation-modal a-hidden" aframe-injected=""><button aframe-injected="">Exit VR</button></div><a-entity light="" data-aframe-default-light="" aframe-injected=""></a-entity><a-entity light="" position="" data-aframe-default-light="" aframe-injected=""></a-entity>
+
+
+
         {{#each sources_array}}
             <a-marker type="barcode" value={{this.marker}}>
               <a-box
-              font="roboto"
+              
               scale="3 3 .1"
               color={{this.color}}
-              opacity=".8"
+              opacity="1"
               look-at="[camera]"
               >
-              {{!-- id is given based on the port to allow us to iterate and replace text value --}}
-                <a-text id ={{this.port}}
-                    value="replace me pls"
-                    look-at="[camera]"
-                    position="0 0 5"
-                    scale=".15 .15 .15"
-                    align="center"
+                <a-box 
+                color="black"
+                opacity=".6"
+                scale=".75 .75 .75"
+                position="0 0 2.5"
                 >
-                </a-text>
+
+                {{!-- id is given based on the port to allow us to iterate and replace text value --}}
+                    <a-text id ={{this.port}}
+                        font="roboto"
+                        value="replace me pls"
+                        look-at="[camera]"
+                        position="0 0 5"
+                        scale=".18 .18 .18"
+                        align="center"
+                        opacity="1.0"
+                    >
+                    </a-text>
+                  </a-box>
               </a-box>
             </a-marker>
         {{/each}}
         {{!-- camera object --}}
-      <a-entity camera> </a-entity>
+      {{!-- <a-entity camera> </a-entity> --}}
     </a-scene>
   </body>
 </html>

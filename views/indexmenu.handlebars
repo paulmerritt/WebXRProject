@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      p{
+        font-size: 0px;
+      }
+    </style>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>WebXR demo</title>
+    {{!-- importing latest a-frame --}}
+    <script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
+    {{!-- importing a-frame module for forcing an object to look at another --}}
+    <script src="https://unpkg.com/aframe-look-at-component@0.8.0/dist/aframe-look-at-component.min.js"></script>
+    {{!-- importing ar.js' a-frame build --}}
+    <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar-nft.js"></script>
+    {{!-- gradient for a-frame --}}
+    <script src="https://cdn.rawgit.com/zcanter/aframe-gradient-sky/master/dist/gradientsky.min.js"></script>
+
+    <script src="https://rawgit.com/rdub80/aframe-gui/master/dist/aframe-gui.min.js"></script>
+
+    <script type="text/javascript">
+    
+    //run my_function every second
+    //setInterval("my_function();",1000); 
+    function my_function(){
+        //AJAX request for most recent variable data
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                var myArr = JSON.parse(this.responseText);
+                myArr.forEach(source => {
+                  //update the text for each source with the most recent text
+                  var t = document.getElementById(''+source.port);
+                  t.setAttribute('text', 'value: '+source.out);
+              });
+            }
+        };
+        xhttp.open("GET", "/sources", true);
+        xhttp.send();
+    }
+
+
+    function replace_text(port){
+        //AJAX request for most recent variable data
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                var myArr = JSON.parse(this.responseText);
+                var prevPort = [];
+                myArr.forEach(source => {
+                  //update the text for each source with the most recent text
+                  if (port == source.port){
+                      var t = document.getElementById('text'+source.port);
+                      console.log(t);
+                      console.log(source.out);
+                      var strig = 'value: '+source.out+';';
+                      console.log(strig);
+                      var new_strig = strig.replace(/['"]+/g, '');
+                      console.log(new_strig);
+                      t.setAttribute('value', new_strig);
+                      t.setAttribute('position', '-.60 0 .1');
+                  }
+                  /*else {
+                    var t = document.getElementById('text'+source.port);
+                      console.log(t);
+                      console.log(source.out);
+                      var strig = 'value: '+source.out+';';
+                      console.log(strig);
+                      var new_strig = strig.replace(/['"]+/g, '');
+                      console.log(new_strig);
+                      t.setAttribute('value', new_strig);
+                      t.setAttribute('position', '-.60 0 .1');
+                  }*/
+              });
+            }
+        };
+        xhttp.open("GET", "/sources", true);
+        xhttp.send();
+    }
+
+        function reset_text(port){
+            var t = document.getElementById('text'+port);
+            var o = t.getAttribute('option');
+            var strig = 'option '+ o +';';
+            t.setAttribute('value', strig);
+            t.setAttribute('position', '-.60 0 .1');
+            
+    }
+    /*Handlebars.registerHelper("inc", function(value, options)
+    {
+        return parseInt(value) + 1;
+    });*/
+    
+    //document.querySelector('#57002').addEventListener('click', function() {
+        // Refresh stuff would go here!
+        //document.querySelector('#57002').setAttribute("text", "clicked");
+        //location.reload();
+    //});
+
+    AFRAME.registerComponent('cursor-listener', {
+  init: function () {
+    //var lastIndex = -1;
+    //var COLORS = ['red', 'green', 'blue'];
+    this.el.addEventListener('click', function (evt) {
+      //lastIndex = (lastIndex + 1) % COLORS.length;
+      
+      
+      if (this.getAttribute('clicked') == "0"){
+        var y = this.getAttribute('position').y - .2;
+        this.setAttribute('position', '0 '+y+' 1');
+        this.setAttribute('geometry', 'primitive: box; width: 1.25; height: .65;');
+        this.setAttribute('opacity', '1.0');
+        replace_text(this.getAttribute('id'));
+        this.setAttribute('clicked', "1");
+      }
+      else if (this.getAttribute('clicked') == "1"){
+        var y = this.getAttribute('position').y + .2;
+        this.setAttribute('position', '0 '+y+' 1');
+        this.setAttribute('geometry', 'primitive: box; width: 1.25; height: .1;');
+        this.setAttribute('opacity', '0.9');
+        reset_text(this.getAttribute('id'));
+        this.setAttribute('clicked', "0");
+      }
+      
+      
+      //console.log('I was clicked at: ', evt.detail.intersection.point);
+
+      //geometry="primitive: box; width: .75; height: .1;"
+    });
+  }
+});
+    </script>
+
+  </head>
+  <body style='margin : 0px; overflow: hidden;'>
+    {{!-- a-frame scene for the objects we place --}}
+    {{!-- not VR, embedded allows us to fit other content on the webpage, register the webcam as a camera source, debug disabled --}}
+    <a-scene
+      vr-mode-ui="enabled: false"
+      embedded
+      arjs="sourceType: webcam; debugUIEnabled: false; detectionMode: mono_and_matrix; matrixCodeType: 3x3;"
+    >
+    
+      <a-camera camera="" position="" rotation="" look-controls="" wasd-controls="">
+          <a-entity cursor="fuse: true; fuseTimeout: 500"
+                  position="0 0 -1"
+                  geometry="primitive: ring; radiusInner: 0.005; radiusOuter: 0.01"
+                  material="color: yellow; shader: flat">
+        </a-entity>
+      </a-camera>
+      
+
+      
+        <a-entity position="0 0 5" id="menu"
+        geometry="primitive: box" material="color: black; opacity: 0.4;"
+        scale="5 5 .1"
+        look-at="[camera]"
+        font="roboto"
+        value="main menu">
+            <table style="border-spacing: 20px;"></table>
+            {{#each sources_array as |item i|}}
+                <tr><td style="border: 10px;">
+                  <a-entity 
+                  clicked="0"
+                  cursor-listener
+                  id ={{this.port}}
+                  geometry="primitive: box; width: 1.25; height: .1;"
+                  {{!-- position="0 0.{{i}} 1" --}}
+                  scale=".7 .7 1"
+                  font="roboto"
+                  material="color: white; opacity: 0.9;"
+                  width="1"
+                  height="1"
+                  opacity="0.0">
+                    <a-text wrapCount = "1" position="-.15 0 .1" height="1.0" width="1.25" id="text{{this.port}}" option = {{i}} value="option {{i}}"></a-text>
+                  </a-entity>
+                </td></tr> 
+            {{/each}}
+            </table>
+        </a-entity>
+      
+    </a-scene>
+  </body>
+</html>
